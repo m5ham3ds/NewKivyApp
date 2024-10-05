@@ -25,10 +25,10 @@ requirements = python3,kivy,requests,Pillow,moviepy,beautifulsoup4,google-genera
 orientation = portrait
 
 # Presplash of the application
- presplash.filename = %(source.dir)s/loading.png
+ presplash.filename = %(source.dir)s/.png
 
 # Icon of the application
- icon.filename = %(source.dir)s/icon.png
+ icon.filename = %(source.dir)s/.png
 
 # (list) Permissions
 android.permissions = android.permission.INTERNET,android.permission.WRITE_EXTERNAL_STORAGE
