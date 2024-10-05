@@ -17,28 +17,33 @@ jobs:
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
+      # Cache Buildozer global directory
       - name: Cache Buildozer global directory
         uses: actions/cache@v2
         with:
           path: ~/.buildozer
           key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
+      # Cache Python packages
       - name: Cache Python packages
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: pip-cache-${{ runner.os }}-${{ steps.get-date.outputs.date }}
 
+      # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
+      # Install dependencies
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install requests Pillow beautifulsoup4 moviepy
 
+      # Build with Buildozer
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
@@ -46,8 +51,24 @@ jobs:
           command: android debug
           buildozer_version: master
 
+      # Upload artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: package
           path: ${{ steps.buildozer.outputs.filename }}
+
+      # Post Set up Python
+      - name: Post Set up Python
+        if: always()
+        run: echo "Post-processing for Python setup..."
+
+      # Post Cache Python packages
+      - name: Post Cache Python packages
+        if: always()
+        run: echo "Post-processing for Python cache..."
+
+      # Post Cache Buildozer global directory
+      - name: Post Cache Buildozer global directory
+        if: always()
+        run: echo "Post-processing for Buildozer cache..."
